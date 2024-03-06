@@ -1,0 +1,104 @@
+version: 2.1
+orbs:
+  cypress: cypress-io/cypress@1.29.0
+executors:
+  with-chrome:
+    docker:
+      - image: 'cypress/base:16.0.0'
+  with-firefox:
+    docker:
+      - image: 'cypress/base:16.0.0'
+  with-edge:
+    docker:
+      - image: 'cypress/base:16.0.0'
+  with-android:
+    docker:
+      - image: 'cimg/android:2021.10.2-node'
+        environment:
+          PATH: "~/.npm-global/bin:$PATH"
+  with-ios:
+    macos:
+      xcode: 12.5.1
+workflows:
+  build:
+    jobs:
+      - set-env-vars
+      - job-node-install-android
+      - cypress/install:
+          install-command: yarn install --frozen-lockfile
+          requires:
+            - job-node-install-android
+      - cypress/run:
+          name: Chrome
+          yarn: true
+          requires:
+            - cypress/install
+          executor: with-chrome
+          browser: chrome
+          record: true
+          command: yarn cypress run --config-file cypress.config.ts -c baseUrl=${E2E_BASE_URL}
+      - cypress/run:
+          name: Firefox
+          yarn: true
+          requires:
+            - cypress/install
+          executor: with-firefox
+          browser: firefox
+          record: true
+          command: yarn cypress run --config-file cypress.config.ts -c baseUrl=${E2E_BASE_URL}
+      - cypress/run:
+          name: Edge
+          yarn: true
+          requires:
+            - cypress/install
+          executor: with-edge
+          browser: edge
+          record: true
+          command: yarn cypress run --config-file cypress.config.ts -c baseUrl=${E2E_BASE_URL}
+      - cypress/run:
+          name: Android
+          yarn: true
+          requires:
+            - cypress/install
+          executor: with-android
+          browser: android
+          record: true
+          command: |
+            nvm install 16.0.0
+            nvm use 16.0.0
+            yarn install --frozen-lockfile
+            yarn cypress run --config-file cypress.config.ts -c baseUrl=${E2E_BASE_URL}
+      - cypress/run:
+          name: iOS
+          yarn: true
+          requires:
+            - cypress/install
+          executor: with-ios
+          browser: ios
+          record: true
+          command: |
+            brew install node@latest
+            export PATH="/usr/local/opt/node@latest/bin:$PATH"
+            yarn cypress run --config-file cypress.config.ts -c baseUrl=${E2E_BASE_URL}
+
+jobs:
+  set-env-vars:
+    docker:
+      - image: cypress/base:16.0.0
+    steps:
+      - run:
+          name: Set Environment Variables
+          command: echo "export E2E_BASE_URL=$E2E_BASE_URL" >> $BASH_ENV
+
+  job-node-install-android:
+    docker:
+      - image: 'cimg/android:2021.10.2-node'
+    steps:
+      - run:
+          name: Install Node.js and Yarn for Android tests
+          command: |
+            mkdir ~/.npm-global
+            npm config set prefix '~/.npm-global'
+            export PATH=~/.npm-global/bin:$PATH
+            apt-get update && apt-get install -y nodejs npm locales sudo openssh-client ca-certificates tar gzip parallel
+            npm install -g yarn
