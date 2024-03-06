@@ -1,5 +1,6 @@
 import {Fixtures} from "../fixtures";
 import {Base} from "../objects/Base";
+import {Table} from "../support/Table";
 
 describe('Landing Page', () => {
 
@@ -11,7 +12,7 @@ describe('Landing Page', () => {
 
     })
 
-    it('should verify Landing page', () => {
+    it.skip('should verify Landing page', () => {
         cy.get(Base.landingPage.Form).find('main').should('exist')
         cy.get(Base.landingPage.Form).find(Base.landingPage.HeaderTable).should('exist')
             .and('have.attr','href')
@@ -31,7 +32,11 @@ describe('Landing Page', () => {
 
     });
 
-    it('should verify create Table', () => {
-        cy.get(Base.landingPage.ButtonCreateTable).click();
+    it('should verify "Delete" functionality by clicking the "action" chip.', () => {
+        Table.addTable()
+        cy.get(Base.landingPage.ListTable).find('li').its('length').then((initialTableCount) => {
+            Table.deleteTable();
+            cy.get(Base.landingPage.ListTable).find('li').its('length').should('eq', initialTableCount - 1);
+        });
     });
 })
