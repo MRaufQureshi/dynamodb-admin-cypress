@@ -1,3 +1,40 @@
+🔔 Hi there,
+
+<img width="600" alt="XXX" src="https://www.monkeyuser.com/2022/unit-tests/248-unit-tests.png" class="center">
+
+### Introduction
+
+Test cases are written using Cypress Framework with Typescript for dynamodb-admin website which has test task defined in the test files.
+This repo focuses only on the e2e aspect.
+
+---
+
+# Getting Started
+
+To install the dependencies you're gonna need to authenticate your npm client.
+In the command line, First navigate to folder '__tests__/test' and then install the package dependencies using the command `npm install` or `npm i`
+
+# Testing Framework
+Cypress
+
+# Local Setup
+UnZip this file locally
+
+# Running E2E tests locally
+
+Run the tests using the command `npm run test`. This brings the Cypress runner. You can now run the tests.
+
+***Side note for understanding***
+
+**Base.ts**
+
+The Base.ts file contains the CSS selectors that build upon Page Object Model (POM). The selectors are categorized into distinct groups according to the pages they correspond to.
+
+**Table.ts**
+
+The Table.ts This class provides functions designed to aid assertions within the application.
+
+
 # dynamodb-admin
 
 [![npm](https://img.shields.io/npm/v/dynamodb-admin.svg)](https://www.npmjs.com/package/dynamodb-admin)
