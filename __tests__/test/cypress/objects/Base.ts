@@ -32,4 +32,12 @@ export const Base= {
     iframe: {
         tableIframe: 'iframe'
     },
+
+    tableDetails:{
+        Header:'.breadcrumb-item',
+        TabGet:'li:nth-child(2)',
+        TabMeta:'li:nth-child(3)',
+        MetaDocumentArea:'#documentArea',
+        GetForm:'#form'
+    }
 }
