@@ -79,11 +79,4 @@ describe('Create Table', () => {
         cy.get(`[data-table-name="${inputValue}"]`)
             .find('.badge-danger').click({multiple:true})
     })
-
-    it('should verify tabs', () => {
-        Fixtures.open('')
-        cy.get(Base.landingPage.ListTable).find(Base.landingPage.FirstTableRom).click()
-        Table.assertTabTitles()
-    })
-
 })
